@@ -1,9 +1,9 @@
 from TeamSummaryClass import *
 from TeamFunctions import *
 
-# SF is stats for, SA is stats against
-sf_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_for.txt"
-sa_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_ag.txt"
+# SF is Stats For, SA is Stats Against
+sf_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_for.csv"
+sa_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_ag.csv"
 
 sf = open(sf_file, "r")
 sa = open(sa_file, "r")
