@@ -1,7 +1,25 @@
-sf = open("/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_for.txt", "r")
-sa = open("/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_ag.txt", "r")
+from TeamSummaryClass import *
+from TeamFunctions import *
 
-header_sf = sf.readline()
-topics_sf = sf.readline().split(",")
-for x in range(len(topics_sf)):
-    print("{} - {}".format(x, topics_sf[x]))
+# SF is stats for, SA is stats against
+sf_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_for.txt"
+sa_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_ag.txt"
+
+sf = open(sf_file, "r")
+sa = open(sa_file, "r")
+
+sf_header = sf.readline() # Clear topline
+sa_header = sa.readline()
+
+sf_topics = sf.readline().split(",") # Clear Second line (topics)
+sa_topics = sa.readline().split(",")
+
+for x in range(len(sf_topics)):
+    print("{} - {}".format(x, sf_topics[x]))
+
+
+
+teams = {} # Dictionary that holds team information
+store_data(sf, sa, teams)
+
+print(teams["Arsenal"])
