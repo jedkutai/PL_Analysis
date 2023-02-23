@@ -18,4 +18,4 @@ for x in range(len(header)):
     print("{} - {}".format(x, header[x]))
 
 
-print(sum("olleh123".encode()))
+match_information(match_file, match_results)
