@@ -1,6 +1,10 @@
 from TeamSummaryClass import *
 
-def store_data(sf_entry, sa_entry, storage):
+def store_data(sf_file, sa_file, storage):
+    sf_entry, sa_entry = open(sf_file, "r"), open(sa_file, "r")
+    sf_entry.readline(), sa_entry.readline() #Clear headers
+    sf_entry.readline(), sa_entry.readline() #Clear headers
+
     sf_data = sf_entry.readline()
     sa_data = sa_entry.readline()
     while sf_data != "":
@@ -11,5 +15,6 @@ def store_data(sf_entry, sa_entry, storage):
 
         sf_data = sf_entry.readline()
         sa_data = sa_entry.readline()
-    
-    print("All Done\n\n")
+
+def match_information():
+    pass
