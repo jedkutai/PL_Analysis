@@ -24,9 +24,10 @@ class TeamSummary:
         op_stats = "Possesion: {}\nGoals: {}\nAssists: {}\nxGoals: {}\nAvg Goals: {}\nAvg Assists: {}\nAvg xGoals: {}\n\n".format(self.possesion_ag, self.goals_ag, self.assists_ag, self.xGoals_ag, self.goals_avg_ag, self.assists_avg_ag, self.xGoals_avg_ag)
         return intro + stats + op_intro + op_stats
     
-
 class MatchInfo:
-    def __init__(self, home, away, home_goals, away_goals, home_xG, away_xG, referee):
+    def __init__(self, match_week, date, home, away, home_goals, away_goals, home_xG, away_xG, referee):
+        self.match_week = match_week
+        self.date = date
         self.home = home
         self.away = away
         self.home_goals = int(home_goals)
@@ -36,4 +37,4 @@ class MatchInfo:
         self.referee = referee
 
     def __repr__(self):
-        return "(H) {} vs. (A) {} finished {} - {}. {} officiated the match.".format(self.home, self.away, self.home_goals, self.away_goals, self.referee)
+        return "{} => (H) {} vs. (A) {} finished {} - {}. {} officiated the match.".format(self.date, self.home, self.away, self.home_goals, self.away_goals, self.referee)
