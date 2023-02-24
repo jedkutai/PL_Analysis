@@ -1,13 +1,16 @@
 from ClubClass import Club
 
 class League:
-    def __init__(self, league_name, season):
+    def __init__(self, league_name, season, max_size):
         self.league_name = league_name
+        self.max_size = max_size
+        self.size = 0
         self.season = season
         self.clubs = {}
 
     def add_club(self, club_name, club_object):
         self.clubs[club_name] = club_object
+        self.size += 1
 
     def get_club(self, club_name):
         return self.clubs[club_name]
@@ -22,6 +25,13 @@ class League:
             d = line.split(",")
             if d[6] == "":
                 continue
+            if self.size < self.max_size:
+                if (d[4] in self.clubs) == False:
+                    new_club = Club(d[4])
+                    self.add_club(d[4], new_club)
+                if (d[8] in self.clubs) == False:
+                    new_club = Club(d[8])
+                    self.add_club(d[8], new_club)
             s = d[6].split("–") # Score THE "-" is NOT A REGULAR "-"
             self.get_club(d[4]).add_home_match(d[8],s[0],s[1])
             self.get_club(d[8]).add_away_match(d[4],s[1],s[0])
