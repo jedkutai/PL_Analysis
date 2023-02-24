@@ -15,6 +15,17 @@ class League:
     def table(self):
         pass # print out clubs ranked
 
+    def update_clubs(self, match_file):
+        mf = open(match_file, "r")
+        mf.readline() # Skip header
+        for line in mf:
+            d = line.split(",")
+            if d[6] == "":
+                continue
+            s = d[6].split("–") # Score THE "-" is NOT A REGULAR "-"
+            self.get_club(d[4]).add_home_match(d[8],s[0],s[1])
+            self.get_club(d[8]).add_away_match(d[4],s[1],s[0])
+
     def __repr__(self):
         return self.league_name
 
