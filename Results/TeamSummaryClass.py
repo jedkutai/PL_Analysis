@@ -1,29 +1,66 @@
-class TeamSummary:
-    def __init__(self, team, matches_played, possesion, goals, assists, xGoals, goals_avg, assists_avg, xGoals_avg, possesion_ag, goals_ag, assists_ag, xGoals_ag, goals_avg_ag, assists_avg_ag, xGoals_avg_ag):
-        self.team = team
-        self.matches_played = int(matches_played)
-        self.possesion = float(possesion)
-        self.goals = int(goals)
-        self.assists = int(assists)
-        self.xGoals = float(xGoals)
-        self.goals_avg = float(goals_avg)
-        self.assists_avg = float(assists_avg)
-        self.xGoals_avg = float(xGoals_avg)
-        self.possesion_ag = float(possesion_ag)
-        self.goals_ag = float(goals_ag)
-        self.assists_ag = float(assists_ag)
-        self.xGoals_ag = float(xGoals_avg_ag)
-        self.goals_avg_ag = float(goals_avg_ag)
-        self.assists_avg_ag = float(assists_avg_ag)
-        self.xGoals_avg_ag = float(xGoals_avg_ag)
+class PremierLeague:
+    def __init__(self, season):
+        self.season = season
+        self.clubs = {}
+
+    def add_club(self, club_name, club_object):
+        self.clubs[club_name] = club_object
+
+    def get_club(self, club_name):
+        return self.clubs[club_name]
+    
+    def __repr__(self):
+        pass
+
+
+class Club:
+    def __init__(self, club_name):
+        self.club_name = club_name
+        self.games_played = 0
+        self.goals_scored = []
+        self.goals_conceded = []
+        self.avg_goals_scored = None
+        self.avg_goals_conceded = None
+        self.wins = 0
+        self.draws = 0
+        self.losses = 0
+        self.points = 0
+        self.goals_scored_deviation = None
+        self.goals_conceded_deviation = None
+        self.opponents = []
+        self.matches = {}
+
+    def update_statistics(self):
+        self.avg_goals_scored = sum(self.goals_scored) / self.games_played
+        self.avg_goals_conceded = sum(self.goals_conceded) / self.games_played
+        scored_sum, conceded_sum = [], []
+        for x in range(self.games_played):
+            scored, conceded = self.goals_scored[x], self.goals_conceded[x]
+            scored_sum.append((scored - self.avg_goals_scored)**2)
+            conceded_sum.append((conceded - self.avg_goals_conceded)**2)
+        self.goals_scored_deviation = (sum(scored_sum)/self.games_played)**(.5)
+        self.goals_conceded_deviation = (sum(conceded_sum)/self.games_played)**(.5)
+
+    def add_home_match(self, opponent, goals_scored, goals_conceded):
+        self.games_played += 1
+        self.opponents.append(opponent)
+        self.goals_scored.append(int(goals_scored))
+        self.goals_conceded.append(int(goals_conceded))
+        self.update_statistics()
+
+    def add_away_match(self, opponent, goals_scored, goals_conceded):
+        self.games_played += 1
+        self.opponents.append(opponent)
+        self.goals_scored.append(int(goals_scored))
+        self.goals_conceded.append(int(goals_conceded))
+        self.update_statistics()
 
     def __repr__(self):
-        intro = "{} have played {} this season in the Premier League\n\n".format(self.team, self.matches_played)
-        stats = "Possesion: {}\nGoals: {}\nAssists: {}\nxGoals: {}\nAvg Goals: {}\nAvg Assists: {}\nAvg xGoals: {}\n\n".format(self.possesion, self.goals, self.assists, self.xGoals, self.goals_avg, self.assists_avg, self.xGoals_avg)
-        op_intro = "This is how other Premier League Teams perform against {}\n\n".format(self.team)
-        op_stats = "Possesion: {}\nGoals: {}\nAssists: {}\nxGoals: {}\nAvg Goals: {}\nAvg Assists: {}\nAvg xGoals: {}\n\n".format(self.possesion_ag, self.goals_ag, self.assists_ag, self.xGoals_ag, self.goals_avg_ag, self.assists_avg_ag, self.xGoals_avg_ag)
-        return intro + stats + op_intro + op_stats
-    
+        intro = "{} score {} goals per match and concede {} goals per match.".format(self.club_name, self.avg_goals_scored, self.avg_goals_conceded)        
+        return intro
+
+
+
 class MatchInfo:
     def __init__(self, match_week, date, home, away, score, home_xG, away_xG, referee):
         self.match_week = match_week
@@ -35,5 +72,9 @@ class MatchInfo:
         self.away_xG = float(away_xG)
         self.referee = referee
 
-    def __repr__(self):
+    def __repr__(self): 
         return "{} => (H) {} vs. (A) {} finished {}. {} officiated the match.".format(self.date, self.home, self.away, self.score, self.referee)
+    
+
+class Referee:
+    pass

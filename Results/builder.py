@@ -1,21 +1,19 @@
 from TeamSummaryClass import *
 from TeamFunctions import *
 
-# Dictionaries
-teams = {}
-match_results = {}
+all_prem_clubs_2223 = ["Crystal Palace", "Arsenal", "Fulham", "Liverpool", "Tottenham", "Southampton", "Newcastle Utd", "Nott'ham Forest", "Leeds United", "Wolves", "Bournemouth", "Aston Villa", "Everton", "Chelsea", "Leicester City", "Brentford", "Manchester Utd", "Brighton", "West Ham", "Manchester City"]
+EPL_2223 = PremierLeague("2022-2023") # 2022-23 Premier League Season
 
-# SF is Stats For, SA is Stats Against
-sf_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_for.csv"
-sa_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/Stats_ag.csv"
-store_data(sf_file, sa_file, teams)
+for club_name in all_prem_clubs_2223:
+    new_club = Club(club_name)
+    EPL_2223.add_club(club_name, new_club)
 
-# Match Results
-match_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/MatchResults.csv"
-mf = open(match_file, "r")
-header = mf.readline().split(",")
-for x in range(len(header)):
-    print("{} - {}".format(x, header[x]))
+data_file = "/Users/jedkutai/Program/PL_Analysis/Team_Data/MatchResults.csv"
+jawn = open(data_file, "r")
+line = jawn.readline().split(",")
+for x in range(len(line)):
+    print("{} - {}".format(x, line[x]))
 
+update_clubs(data_file, EPL_2223)
 
-match_information(match_file, match_results)
+print(EPL_2223.get_club("Arsenal"))
