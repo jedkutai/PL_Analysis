@@ -38,7 +38,7 @@ def update_clubs(match_file, league_object):
         if d[6] == "":
             continue
         
-        s = d[6].split("–") # Score
+        s = d[6].split("–") # Score THE - is NOT A REGULAR  -
         league_object.get_club(d[4]).add_home_match(d[8],s[0],s[1])
         league_object.get_club(d[8]).add_away_match(d[4],s[1],s[0])
         

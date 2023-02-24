@@ -1,5 +1,6 @@
-class PremierLeague:
-    def __init__(self, season):
+class League:
+    def __init__(self, league_name, season):
+        self.league_name = league_name
         self.season = season
         self.clubs = {}
 
@@ -9,8 +10,11 @@ class PremierLeague:
     def get_club(self, club_name):
         return self.clubs[club_name]
     
+    def table(self):
+        pass # print out clubs ranked
+
     def __repr__(self):
-        pass
+        return self.league_name
 
 
 class Club:
@@ -19,6 +23,7 @@ class Club:
         self.games_played = 0
         self.goals_scored = []
         self.goals_conceded = []
+        self.goal_difference = 0
         self.avg_goals_scored = None
         self.avg_goals_conceded = None
         self.wins = 0
@@ -40,23 +45,38 @@ class Club:
             conceded_sum.append((conceded - self.avg_goals_conceded)**2)
         self.goals_scored_deviation = (sum(scored_sum)/self.games_played)**(.5)
         self.goals_conceded_deviation = (sum(conceded_sum)/self.games_played)**(.5)
+        self.points = (self.wins * 3) + self.draws
+        self.goal_difference = sum(self.goals_scored) - sum(self.goals_conceded)
 
     def add_home_match(self, opponent, goals_scored, goals_conceded):
         self.games_played += 1
         self.opponents.append(opponent)
         self.goals_scored.append(int(goals_scored))
         self.goals_conceded.append(int(goals_conceded))
+        if goals_scored > goals_conceded:
+            self.wins += 1
+        elif goals_conceded > goals_scored:
+            self.losses += 1
+        elif goals_scored == goals_conceded:
+            self.draws += 1
         self.update_statistics()
+        
 
     def add_away_match(self, opponent, goals_scored, goals_conceded):
         self.games_played += 1
         self.opponents.append(opponent)
         self.goals_scored.append(int(goals_scored))
         self.goals_conceded.append(int(goals_conceded))
+        if goals_scored > goals_conceded:
+            self.wins += 1
+        elif goals_conceded > goals_scored:
+            self.losses += 1
+        elif goals_scored == goals_conceded:
+            self.draws += 1
         self.update_statistics()
 
     def __repr__(self):
-        intro = "{} score {} goals per match and concede {} goals per match.".format(self.club_name, self.avg_goals_scored, self.avg_goals_conceded)        
+        intro = "{} score {} goals per match and concede {} goals per match\nThey currently have {} points and a Goal Difference of: {}".format(self.club_name, round(self.avg_goals_scored, 2), round(self.avg_goals_conceded, 2), self.points, self.goal_difference)        
         return intro
 
 
