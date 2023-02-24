@@ -1,6 +1,5 @@
 from LeagueClass import League
 from ClubClass import Club
-from TeamFunctions import *
 import datetime
 
 
