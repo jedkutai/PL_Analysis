@@ -1,7 +1,7 @@
 from ClubClass import Club
 
 class League:
-    def __init__(self, league_name, season, max_size):
+    def __init__(self, league_name, season, max_size=20):
         self.league_name = league_name
         self.max_size = max_size
         self.size = 0
@@ -17,14 +17,32 @@ class League:
     
     def table(self):
         t = sorted(self.clubs.values(), key=lambda x: x.ranking, reverse=True)
-        ranked_table = ""
+        rt = "" # ranked table
+        header = "\n\n#   Team" + " "*16 + "PL" + " "*3 + "W" + " "*3 + "D" + " "*3+ "L" + " "*5 + "+/-" + " "*3 + "GD" + " "*4 + "PTS"
         for x in range(len(t)):
+            r = ""
             if t[x].goal_difference > 0:
-                row = "\n{} {} PL: {} W: {} D: {} L: {} +/-: {}-{} GD: +{} PTS: {}".format(x+1, t[x].club_name, t[x].games_played, t[x].wins, t[x].draws, t[x].losses, sum(t[x].goals_scored), sum(t[x].goals_conceded), t[x].goal_difference, t[x].points)
+                offset = [4, 20, 5, 4, 4, 5, 0, 0, 4, 6, 20]
+                row = [str(x+1), str(t[x].club_name), str(t[x].games_played), str(t[x].wins), str(t[x].draws), str(t[x].losses), str(sum(t[x].goals_scored)), "-", str(sum(t[x].goals_conceded)), "+" + str(t[x].goal_difference), str(t[x].points)]
+                for x in range(len(row)):
+                    spaces = offset[x] - len(row[x])
+                    r += row[x] + " "*spaces
+            elif t[x].goal_difference < 0:
+                offset = [4, 20, 5, 4, 4, 5, 0, 0, 4, 6, 20]
+                row = [str(x+1), str(t[x].club_name), str(t[x].games_played), str(t[x].wins), str(t[x].draws), str(t[x].losses), str(sum(t[x].goals_scored)), "-", str(sum(t[x].goals_conceded)), str(t[x].goal_difference), str(t[x].points)]
+                for x in range(len(row)):
+                    spaces = offset[x] - len(row[x])
+                    r += row[x] + " "*spaces
             else:
-                row = "\n{} {} PL: {} W: {} D: {} L: {} +/-: {}-{} GD: {} PTS: {}".format(x+1, t[x].club_name, t[x].games_played, t[x].wins, t[x].draws, t[x].losses, sum(t[x].goals_scored), sum(t[x].goals_conceded), t[x].goal_difference, t[x].points)
-            ranked_table += row
-        return ranked_table
+                offset = [4, 20, 5, 4, 4, 5, 0, 0, 5, 5, 20]
+                row = [str(x+1), str(t[x].club_name), str(t[x].games_played), str(t[x].wins), str(t[x].draws), str(t[x].losses), str(sum(t[x].goals_scored)), "-", str(sum(t[x].goals_conceded)), str(t[x].goal_difference), str(t[x].points)]
+                for x in range(len(row)):
+                    spaces = offset[x] - len(row[x])
+                    r += row[x] + " "*spaces
+
+            rt += "\n" + r
+            
+        return header + rt
     
     def update_clubs(self, match_file):
         mf = open(match_file, "r")
