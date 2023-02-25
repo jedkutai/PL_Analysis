@@ -1,6 +1,7 @@
 class Club:
     def __init__(self, club_name):
         self.club_name = club_name
+        self.ranking = 0
         self.games_played = 0
         self.goals_scored = []
         self.goals_conceded = []
@@ -58,6 +59,7 @@ class Club:
         self.goals_conceded_deviation = (sum(conceded_sum)/self.games_played)**(.5)
         self.points = (self.wins * 3) + self.draws
         self.goal_difference = sum(self.goals_scored) - sum(self.goals_conceded)
+        self.ranking = self.points + (self.goal_difference / 1000) + (sum(self.goals_scored) / 100000)
 
     def update_home_statistics(self): # add home_ to variables
         self.home_avg_goals_scored = sum(self.home_goals_scored) / self.home_games_played

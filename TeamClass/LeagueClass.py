@@ -16,8 +16,16 @@ class League:
         return self.clubs[club_name]
     
     def table(self):
-        pass # print out clubs ranked
-
+        t = sorted(self.clubs.values(), key=lambda x: x.ranking, reverse=True)
+        ranked_table = ""
+        for x in range(len(t)):
+            if t[x].goal_difference > 0:
+                row = "\n{} {} PL: {} W: {} D: {} L: {} +/-: {}-{} GD: +{} PTS: {}".format(x+1, t[x].club_name, t[x].games_played, t[x].wins, t[x].draws, t[x].losses, sum(t[x].goals_scored), sum(t[x].goals_conceded), t[x].goal_difference, t[x].points)
+            else:
+                row = "\n{} {} PL: {} W: {} D: {} L: {} +/-: {}-{} GD: {} PTS: {}".format(x+1, t[x].club_name, t[x].games_played, t[x].wins, t[x].draws, t[x].losses, sum(t[x].goals_scored), sum(t[x].goals_conceded), t[x].goal_difference, t[x].points)
+            ranked_table += row
+        return ranked_table
+    
     def update_clubs(self, match_file):
         mf = open(match_file, "r")
         mf.readline() # Skip header
@@ -38,22 +46,3 @@ class League:
 
     def __repr__(self):
         return self.league_name
-
-
-class MatchInfo:
-    def __init__(self, match_week, date, home, away, score, home_xG, away_xG, referee):
-        self.match_week = match_week
-        self.date = date
-        self.home = home
-        self.away = away
-        self.score = score
-        self.home_xG = float(home_xG)
-        self.away_xG = float(away_xG)
-        self.referee = referee
-
-    def __repr__(self): 
-        return "{} => (H) {} vs. (A) {} finished {}. {} officiated the match.".format(self.date, self.home, self.away, self.score, self.referee)
-    
-
-class Referee:
-    pass
