@@ -10,6 +10,4 @@ LaLiga_2223 = League("La Liga", "2022-2023", 20)
 liga_file = "/Users/jedkutai/Program/PL_Analysis/TeamData/La_Liga_MatchResults_2223.csv"
 LaLiga_2223.update_clubs(liga_file)
 
-
-print(EPL_2223.table())
-print(LaLiga_2223.table())
+EPL_2223.versus("Arsenal", "Manchester Utd")
