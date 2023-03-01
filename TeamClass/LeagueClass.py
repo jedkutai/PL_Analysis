@@ -6,6 +6,7 @@ class League:
         self.max_size = max_size
         self.size = 0
         self.season = season
+        self.total_points = 0
         self.clubs = {}
 
     def add_club(self, club_name, club_object):
@@ -117,32 +118,53 @@ class League:
                     return float(data[1])
         
 
-    def versus(self, home_team, away_team, max_goals=6):
+    def versus(self, home_team, away_team, neutral=False, max_goals=6):
         odds = {}
         scores = []
+        answer = "\nTop 5 Results"
         for x in range(max_goals+1):
             for y in range(max_goals+1):
                 scores.append((x,y))
-        for score in scores:
-            home_z_scored = self.z_scored(home_team, score[0])
-            away_z_conceded = self.z_conceded(away_team, score[0])
-            home_z_conceded = self.z_conceded(home_team, score[1])
-            away_z_scored = self.z_scored(away_team, score[1])
-            a = self.z_score_to_odds(home_z_scored[0])
-            b = self.z_score_to_odds(away_z_conceded[0])
-            c = self.z_score_to_odds(home_z_conceded[0])
-            d = self.z_score_to_odds(away_z_scored[0])
-            chance = ((a + b)/2) * ((c + d)/2)
-            odds[score] = chance
-        odds_sorted = sorted(odds.items(), key=lambda x: x[1], reverse=True)
-        xyz = 0
-        print("\nTop 5 Results")
-        for x in odds_sorted:
-            xyz += 1
-            ranked = "(H) {} {}-{} (A) {} => {}%".format(home_team, x[0][0], x[0][1], away_team, round((x[1]*100), 2))
-            print(ranked)
-            if xyz == 5:
-                break
+        if neutral == True:
+            for score in scores:
+                home_z_scored = self.z_scored(home_team, score[0])
+                away_z_conceded = self.z_conceded(away_team, score[0])
+                home_z_conceded = self.z_conceded(home_team, score[1])
+                away_z_scored = self.z_scored(away_team, score[1])
+                a = self.z_score_to_odds(home_z_scored[0])
+                b = self.z_score_to_odds(away_z_conceded[0])
+                c = self.z_score_to_odds(home_z_conceded[0])
+                d = self.z_score_to_odds(away_z_scored[0])
+                chance = ((a + b)/2) * ((c + d)/2)
+                odds[score] = chance
+            odds_sorted = sorted(odds.items(), key=lambda x: x[1], reverse=True)
+            xyz = 0
+            for x in odds_sorted:
+                xyz += 1
+                answer += "\n{} {}-{} {} => {}%".format(home_team, x[0][0], x[0][1], away_team, round((x[1]*100), 2))
+                if xyz == 5:
+                    return answer
+        else:
+            ht = self.get_club(home_team)
+            at = self.get_club(away_team)
+            for score in scores:
+                home_z_scored = self.z_scored(home_team, score[0])
+                away_z_conceded = self.z_conceded(away_team, score[0])
+                home_z_conceded = self.z_conceded(home_team, score[1])
+                away_z_scored = self.z_scored(away_team, score[1])
+                a = ((self.z_score_to_odds(home_z_scored[0]) * ht.games_played) + (self.z_score_to_odds(home_z_scored[1]) * ht.home_games_played))/(ht.games_played + ht.home_games_played)
+                b = ((self.z_score_to_odds(away_z_conceded[0]) * at.games_played) + (self.z_score_to_odds(away_z_conceded[2]) * at.away_games_played))/(at.games_played + at.away_games_played)                
+                c = ((self.z_score_to_odds(home_z_conceded[0]) * ht.games_played) + (self.z_score_to_odds(home_z_conceded[1]) * ht.home_games_played))/(ht.games_played + ht.home_games_played)               
+                d = ((self.z_score_to_odds(away_z_scored[0]) * at.games_played) + (self.z_score_to_odds(away_z_scored[2]) * at.away_games_played))/(at.games_played + at.away_games_played)
+                chance = ((a + b)/2) * ((c + d)/2)
+                odds[score] = chance
+            odds_sorted = sorted(odds.items(), key=lambda x: x[1], reverse=True)
+            xyz = 0
+            for x in odds_sorted:
+                xyz += 1
+                answer += "\n{} {}-{} {} => {}%".format(home_team, x[0][0], x[0][1], away_team, round((x[1]*100), 2))
+                if xyz == 5:
+                    return answer
 
     def __repr__(self):
         return self.league_name

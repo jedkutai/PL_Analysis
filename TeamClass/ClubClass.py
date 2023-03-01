@@ -2,6 +2,9 @@ class Club:
     def __init__(self, club_name):
         self.club_name = club_name
         self.ranking = 0
+        self.weight = 0
+        self.fire_power = 0
+
         self.games_played = 0
         self.goals_scored = []
         self.goals_conceded = []
